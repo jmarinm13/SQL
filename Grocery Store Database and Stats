@@ -1,4 +1,4 @@
-/**check out my store database here. first I created a store database, then displayed the database ordered by price in descending order. finally, I Select the quantity SUM of all items order by aisle**/
+/**check out my store database here. first I created a store database, 
 CREATE TABLE clothes_store (id INTEGER PRIMARY KEY, name TEXT, quantity INTEGER, price INTEGER, aisle INTEGER);
 
 INSERT INTO clothes_store VALUES (1, "hats", 5, 5, 1),
@@ -17,6 +17,8 @@ INSERT INTO clothes_store VALUES (1, "hats", 5, 5, 1),
 (14, "pajamas", 10, 5, 5),
 (15, "coats", 10, 50, 5);
 
+/*This query returns a dataset that displays the database ordered by price in descending order*/
 SELECT * FROM clothes_store order by price desc;
 
+/*This query returns a dataset that displays the quantity SUM of all items order by aisle*/
 SELECT aisle, SUM(quantity) FROM clothes_store order by aisle;
