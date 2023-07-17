@@ -1,0 +1,75 @@
+
+
+CREATE TABLE famous_People (id INTEGER PRIMARY KEY,
+name TEXT,
+birthdate TEXT,
+occupation integer,
+spouse_id integer);
+
+INSERT INTO famous_people VALUES (1,"Tom Hanks", "07-09-1956", 1, 2);
+INSERT INTO famous_people VALUES (2,"Rita Wilson", "10-26-1956", 2, 1);
+INSERT INTO famous_people VALUES (3,"Byonce", "09-04-1981", 3, 4);
+INSERT INTO famous_people VALUES (4,"Jay Z", "12-04-1969", 4, 3);
+INSERT INTO famous_people VALUES (5,"John Legend", "12-28-1978", 5, 6);
+INSERT INTO famous_people VALUES (6,"Chrissy Teigen", "11-30-1985", 6, 5);
+INSERT INTO famous_people VALUES (7,"Kelly Ripa", "10-02-1970", 7, 8);
+INSERT INTO famous_people VALUES (8,"Mark Consuelos", "03-30-1971", 8, 7);
+INSERT INTO famous_people VALUES (9,"Justin Timberlake", "01-31-1981", 9, 10);
+INSERT INTO famous_people VALUES (10,"Jessica Biel", "03-03-1982", 10, 9);
+INSERT INTO famous_people VALUES (11,"Victoria Beckham", "04-17-1974", 11, 12);
+INSERT INTO famous_people VALUES (12, "David Beckham", "05-02-1975", 12, 11);
+INSERT INTO famous_people VALUES (13, "Tim McGraw", "05-01-1967", 13, 14);
+INSERT INTO famous_people VALUES (14, "Faith Hill", "09-21-1967", 14, 13);
+INSERT INTO famous_people VALUES (15,"Taylor Swift", "12-13-1989", 15, null);
+
+CREATE TABLE profession (id INTEGER PRIMARY KEY,
+title TEXT, famous_people_id INTEGER);
+
+INSERT INTO Profession VALUES (1, "Actor", 1);
+INSERT INTO Profession VALUES (2, "Actor", 2);
+INSERT INTO Profession VALUES (3, "Singer", 3);
+INSERT INTO Profession VALUES (4, "Singer", 4);
+INSERT INTO Profession VALUES (5, "Singer", 5);
+INSERT INTO Profession VALUES (6, "Model", 6);
+INSERT INTO Profession VALUES (7, "Actor", 7);
+INSERT INTO Profession VALUES (8, "Actor", 8);
+INSERT INTO Profession VALUES (9, "Singer", 9);
+INSERT INTO Profession VALUES (10, "Actor", 10);
+INSERT INTO Profession VALUES (11, "Singer", 11);
+INSERT INTO Profession VALUES (12, "Soccer_Player", 12);
+INSERT INTO Profession VALUES (13, "Singer", 13);
+INSERT INTO Profession VALUES (14, "Singer", 14);
+INSERT INTO Profession VALUES (15, "Singer", 15);
+
+CREATE table buddies (id INTEGER PRIMARY KEY, person1_id INTEGER, person2_id INTEGER);
+
+INSERT INTO buddies (person1_id, person2_id) VALUES (1, 8);
+INSERT INTO buddies (person1_id, person2_id) VALUES (2, 7);
+INSERT INTO buddies (person1_id, person2_id) VALUES (3, 15);
+INSERT INTO buddies (person1_id, person2_id) VALUES (4, 9);
+INSERT INTO buddies (person1_id, person2_id) VALUES (5, 13);
+INSERT INTO buddies (person1_id, person2_id) VALUES (6, 11);
+INSERT INTO buddies (person1_id, person2_id) VALUES (10, 14);
+INSERT INTO buddies (person1_id, person2_id) VALUES (12, 5);
+
+/*This query returns a dataset that displays the name and profession of famous people by combining information from famous_people and professions table*/
+SELECT FP.name, P.title AS profession from famous_people as FP
+JOIN profession as P
+ON FP.id = P.famous_people_id;
+
+/*this query returns a dataset that displays the name and the spouse's name of the famous people by joining itself information from famous_people table*/
+SELECT famous_people.name, spouses.name as spouses
+FROM famous_people
+JOIN famous_people spouses
+ON famous_people.spouse_id = spouses.id;
+
+/*this query returns dataset that displays the name and the buddy's name of famous people by combining joins from famous_people and buddies table*/
+SELECT a.name, b.name as buddy
+FROM buddies
+JOIN famous_people a
+ON buddies.person1_id = a.id
+JOIN famous_people b
+ON buddies.person2_id = b.id
+
+
+
