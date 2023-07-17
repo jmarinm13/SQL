@@ -1,4 +1,4 @@
-
+/**check out my famous_people database here. first I created a famous_people database a
 
 CREATE TABLE famous_People (id INTEGER PRIMARY KEY,
 name TEXT,
