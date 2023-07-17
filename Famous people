@@ -1,4 +1,8 @@
-/**check out my famous_people database here. first I created a famous_people database a
+
+
+# I have created multiple tables in this project revealing insights about famous people's professions, spouses, and buddies. 
+
+# The project was written using the Standard SQL dialect and utilized data from the following famous_people datasets (please see queries and explanation below):
 
 CREATE TABLE famous_People (id INTEGER PRIMARY KEY,
 name TEXT,
