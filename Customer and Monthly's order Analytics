@@ -1,0 +1,80 @@
+
+
+#In this SQL, I am utilizing queries involving multiple tables to calculate essential statistics concerning customer purchases and order information#
+
+/*How many orders were placed in January?*/
+SELECT COUNT(*)
+FROM BIT_DB.JanSales
+WHERE length(orderid) = 6 
+AND orderid <> 'Order ID' 
+
+/*How many of those orders were for an iPhone?*/
+SELECT COUNT(*)
+FROM BIT_DB.JanSales
+WHERE Product ='iPhone'
+AND length(orderid) = 6 
+AND orderid <> 'Order ID'
+
+/*select the customer account numbers for all the orders that were placed in frebruary*/
+SELECT DISTINCT acctnum FROM BIT_DB.customers
+INNER JOIN BIT_DB.FebSales
+ON BIT_DB.customers.order_id = BIT_DB.FebSales.orderid
+WHERE length(orderid) = 6 
+AND orderid <> 'Order ID'
+
+/*which product was the cheapest sold in January and what was the price*/
+SELECT product, MIN(price) FROM BIT_DB.JanSales
+WHERE length(orderid) = 6 
+AND orderid <> 'Order ID'
+
+or
+
+SELECT distinct Product, price
+FROM BIT_DB.JanSales
+WHERE  price in (SELECT min(price) FROM BIT_DB.JanSales)
+
+or
+
+SELECT distinct product, MIN(price) 
+FROM BIT_DB.JanSales Jan 
+GROUP BY product, price 
+ORDER BY price ASC LIMIT 1
+
+/*what is the total revenue for each product sold in January*/
+SELECT product, sum(quantity)*price as revenue FROM BIT_DB.JanSales
+WHERE length(orderid) = 6 
+AND orderid <> 'Order ID' 
+GROUP BY product
+
+/*which product were sold in February at 548 lincoln , st, seattle, WA  98101? how many of each were sold? what was the total revenue*/
+SELECT product, SUM(quantity), SUM(quantity*price) as total_revenue FROM BIT_DB.FebSales
+WHERE location = '548 Lincoln St, Seattle, WA 98101'
+GROUP BY product
+
+/*how many customers ordered more than 2 products at a time in Feb? what was the average amount spent for those customers*/
+SELECT COUNT(*) as number_of_customers, avg(quantity*price) as average_amount_spent FROM BIT_DB.customers
+LEFT JOIN BIT_DB.FebSales
+ON BIT_DB.customers.order_id = BIT_DB.FebSales.orderid
+WHERE quantity > 2
+AND length(orderid) = 6 
+AND orderid <> 'Order ID'
+
+/*which month had the most total revenue*/
+SELECT 'January' as month, round(sum(quantity*price)) as total_revenue
+FROM BIT_DB.JanSales
+UNION ALL
+SELECT 'February' as month, round(sum(quantity*price)) as total_revenue
+FROM BIT_DB.FebSales
+UNION ALL
+SELECT 'March' as month, round(sum(quantity*price)) as total_revenue
+FROM BIT_DB.MarSales
+UNION ALL
+SELECT 'April' as month, round(sum(quantity*price)) as total_revenue
+FROM BIT_DB.AprSales
+UNION ALL
+SELECT 'May' as month, round(sum(quantity*price)) as total_revenue
+FROM BIT_DB.MaySales
+WHERE length(orderid) = 6 
+AND orderid <> 'Order ID'
+ORDER BY total_revenue DESC
+LIMIT 1
