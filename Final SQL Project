@@ -1,0 +1,109 @@
+# For this project, I downloaded a dataset called chinook to SQLiteStudio
+# The following SQL was written to answer specific questions about the content on chinook:
+
+/*Show Customers (their full names, customer ID, and country) who are not in the US*/
+SELECT firstname, lastname, customerid, country from chinook.customers 
+where country != "USA"
+
+
+/*Show only the Customers from Brazil*/
+SELECT * from customers
+where country = "Brazil";
+
+
+/*Find the Invoices of customers who are from Brazil. The resulting table should show the customer's full name, Invoice ID, Date of the invoice, and billing country*/
+SELECT c.firstname, c.lastname, i.invoiceid, i.invoicedate, i.billingcountry
+FROM customers c
+INNER JOIN invoices i
+ON c.customerid = i.customerid
+where i.billingcountry = "Brazil";
+
+/*Show the Employees who are Sales Agents*/
+SELECT * FROM chinook.Employees
+WHERE Title = "Sales Support Agent" ;
+
+/*Find a unique/distinct list of billing countries from the Invoice table*/
+SELECT DISTINCT billingcountry from invoices;
+
+/*Provide a query that shows the invoices associated with each sales agent. The resulting table should include the Sales Agent's full name*/
+SELECT employees.firstname, employees.lastname,  i.invoiceid
+FROM invoices i
+INNER JOIN customers c
+    on i.customerid = c.customerid
+inner join employees 
+ON employees.employeeid = c.SupportRepId;
+
+/*Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers*/
+SELECT c.firstname as customer_firstname, c.lastname as customer_lastname, employees.firstname as agent_firstname, employees.lastname as agent_lastname, i.total 
+FROM invoices i
+INNER JOIN customers c
+    on i.customerid = c.customerid
+inner join employees 
+ON employees.employeeid = c.SupportRepId;
+
+/*How many Invoices were there in 2009*/
+SELECT count(*) from invoices
+where invoicedate like '2009%';
+
+
+/*What are the total sales for 2009*/
+SELECT sum(total) from invoices
+where invoicedate like '2009%';
+
+
+/*Write a query that includes the purchased track name with each invoice line ID*/
+SELECT t.name, i.invoicelineid
+FROM tracks t
+INNER JOIN invoice_items i
+ON t.trackid = i.trackid;
+
+
+/*Write a query that includes the purchased track name AND artist name with each invoice line ID*/
+SELECT tracks.name as purchase_track_name, artists.name as artist, invoice_items.invoicelineid
+FROM artists
+INNER JOIN albums
+    on artists.artistid = albums.artistid
+inner join tracks 
+ON tracks.albumid = albums.albumid
+inner join invoice_items
+on invoice_items.trackid = tracks.trackid;
+
+/*Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre*/
+SELECT t.name as track_name, a.title as album_name, m.name as media_type, g.name as genre
+FROM media_types m
+INNER JOIN tracks t
+    on m.mediatypeid = t.mediatypeid
+inner join genres g
+ON g.genreid = t.genreid
+inner join albums a
+on a.albumid = t.albumid;
+
+
+/*Show the total sales made by each sales agent*/
+SELECT employees.firstname as employee_firstname, employees.lastname as employee_lastname,  round(sum(i.total), 2) as total
+FROM invoices i
+INNER JOIN customers c
+    on i.customerid = c.customerid
+inner join employees 
+ON employees.employeeid = c.SupportRepId
+group by employee_firstname;
+
+/*Which sales agent made the most dollars in sales in 2009*/
+SELECT employees.firstname as employee_firstname, employees.lastname as employee_lastname,  round(sum(i.total),2) as total, i.invoicedate
+FROM invoices i
+INNER JOIN customers c
+    on i.customerid = c.customerid
+inner join employees 
+ON employees.employeeid = c.SupportRepId
+where i.invoicedate like '2009%'
+group by employee_firstname
+order by round(sum(i.total),2) desc
+limit 1;
+
+/*Write a query that includes the purchased track name with each playlist name*/
+SELECT t.name as track_name, p.name as playlist_name
+FROM playlist_track pt
+INNER JOIN playlists p
+    on pt.playlistid = p.playlistid
+inner join tracks t 
+ON t.trackid = pt.trackid;
