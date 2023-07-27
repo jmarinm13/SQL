@@ -1,4 +1,4 @@
-#This project utilizes the follow Superstore data: 
+#This project utilizes the following Superstore data: 
 
 CREATE TABLE superstore (
     item_id INTEGER PRIMARY KEY,
@@ -38,5 +38,5 @@ SELECT max(price) from superstore
 group by price desc;
 
 /*Write a SQL query that will show a statistic about the price for items in the category of "Kitchen Supplies"*/
-SELECT item_name, min(price) from superstore
+SELECT item_name, min(price) from superstore;
 where category = "kitchen Supplies";
