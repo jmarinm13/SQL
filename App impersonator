@@ -1,0 +1,40 @@
+# I have created a table in this project revealing insights about an App that stores users data such as name, email, phone, country
+
+# The project was written using the Standard SQL dialect and utilized data from the following users datasets (please see queries and explanation below):
+
+/* I CREATED a table that stores data */
+CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, email TEXT, phone TEXT);
+
+/* I INSERTED a few example rows in the table*/
+INSERT INTO users Values (1,"Juliana Murillo", "jmurillo@gmail.com", "6781234567");
+INSERT INTO users VALUES (2, "Carolina Rivera", "crivera@hotmail.com", "7709751339");
+INSERT INTO users VALUES (3, "Natalia Mesa", "nmesa@gmail.com", "4049878997");
+
+/* I SELECTED all the columns in each row to see what your table looks */
+SELECT * FROM users;
+
+/* I ALTERED the table to add a 'country' column */
+ALTER TABLE users ADD country TEXT;
+
+/* I SELECTED all the columns in each row to see what your table looked after */
+SELECT * from users;
+
+/* I UPDATED the country column with the corresponding name using the condition ID*/
+UPDATE users SET country = "Mexico" where id=1;
+UPDATE users SET country = "USA" where id=2;
+UPDATE users SET country = "Colombia" where id=3;
+
+/* I SELECTED all the columns in each row to see what your table looked after */
+SELECT * FROM users;
+
+/* I INSERTED a new user into the table that has all four attributes filled in */
+INSERT INTO users (name, email, phone, country) VALUES ("Andres Torres", "atorres@hotmail.com", "7863458976", "Canada");
+
+/* I SELECTED all the columns in each row to see what your table looked after */
+SELECT * FROM users;
+
+/* I DELETED the user condition id = 1*/
+DELETE FROM users where id=1;
+
+/* I SELECTED all the columns in each row to see what your table looked after */
+SELECT * FROM users;
