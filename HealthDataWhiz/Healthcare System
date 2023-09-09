@@ -1,3 +1,7 @@
+# For this project, I downloaded conditions, encounters, patients, and immunizations data from Data Wizardry website.
+# Then I created 4 tables to insert data into.
+# Finally, I performed analytics on the data using PostgreSQL. 
+
 CREATE TABLE conditions (
 START DATE
 ,STOP DATE
