@@ -1,0 +1,161 @@
+CREATE TABLE BIT_DB.Sales (
+account_id varchar(8),
+order_id varchar(8),
+product varchar(80),
+quantity_order integer(3),
+price_each double(7,3),
+order_date datetime,
+purchase_address varchar(120),
+month integer(3),
+sales integer(120),
+city varchar(120),
+hour varchar(20))
+
+SELECT COUNT(DISTINCT product) AS total_unique_products_sold
+FROM sales;
+
+SELECT round(avg(sales)) from sales
+
+SELECT
+    order_date,
+    CASE
+        WHEN DAYOFWEEK(order_date) = 1 THEN 'Sunday'
+        WHEN DAYOFWEEK(order_date) = 2 THEN 'Monday'
+        WHEN DAYOFWEEK(order_date) = 3 THEN 'Tuesday'
+        WHEN DAYOFWEEK(order_date) = 4 THEN 'Wednesday'
+        WHEN DAYOFWEEK(order_date) = 5 THEN 'Thursday'
+        WHEN DAYOFWEEK(order_date) = 6 THEN 'Friday'
+        WHEN DAYOFWEEK(order_date) = 7 THEN 'Saturday'
+        ELSE 'Invalid'
+    END AS weekday_name
+FROM
+    sales;
+
+
+
+
+SELECT 
+    EXTRACT(MONTH FROM order_date) AS month_seasonal,
+    AVG(quantity_order) AS average_sales
+FROM sales
+GROUP BY month_seasonal
+ORDER BY month_seasonal;
+
+
+select round(sum(sales)) from sales
+
+select order_Date, hour, round(sum(sales))
+CASE
+WHEN order_date = "
+WHEN
+WHEN
+WHEN
+WHEN
+WHEN
+WHEN
+END AS weekday from sales
+group by order_date
+order by hour
+
+SELECT city, round(sum(sales),0) AS sales_per_city
+FROM sales
+GROUP BY city
+order by sales_per_city desc;
+
+select*from sales
+where month = "11"
+
+/*how many orders were placed by the whole year*/
+SELECT sum(quantity_order)
+FROM BIT_DB.sales
+
+
+/*what product produce the mmost revenue*/
+SELECT product, sum(quantity_order)*price_each as revenue FROM BIT_DB.sales
+GROUP BY product
+order by revenue desc
+
+/*which month had the most total revenue*/
+SELECT month, SUM(quantity_order*price_each) AS total_revenue
+FROM sales
+WHERE month in("12","11","10","9","8","7","6","5","4","3","2","1")
+group by month
+order by month
+
+
+Select sum(quantity_order) from sales
+
+select sum(price_each)*sum(quantity_order) from sales
+where month = "1"
+
+select month, sum(price_each)*sum(quantity_order) from sales
+WHERE month in("12","11","10","9","8","7","6","5","4","3","2","1")
+group by month
+order by month
+
+
+
+
+SELECT  
+    ROUND(SUM(price_each * quantity_order)) AS total_revenue, month,
+CASE
+WHEN month = 1 then "January"
+WHEN month = 2 then "February"
+WHEN month = 3 then "March"
+WHEN month = 4 then "April"
+WHEN month = 5 then "May"
+WHEN month = 6 then "June"
+WHEN month = 7 then "July"
+WHEN month = 8 then "August"
+WHEN month = 9 then "September"
+WHEN month = 10 then "October"
+WHEN month = 11 then "November"
+WHEN month = 12 then "December"
+ELSE "unknown"
+END as MonthSales
+from sales
+group by monthSales
+order by month;
+
+
+SELECT 
+    month, 
+    ROUND(SUM(price_each * quantity_order)) AS total_revenue
+FROM sales
+WHERE month IN ("12", "11", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1")
+GROUP BY month
+ORDER BY month;
+
+/*top ten selling product*/
+select product, round(sum(sales)) as total_sales from BIT_DB.Sales
+group by product 
+order by total_sales desc
+limit 10
+
+/*top ten products most sold per unit*/
+select product, sum(quantity_order) from BIT_DB.Sales
+group by product 
+order by sum(quantity_order) desc
+limit 10
+
+/*total revenue by quarter*/
+SELECT round(sum(sales)),
+CASE
+WHEN month between 1 and 3 then "Q1"
+WHEN month between 4 and 6 then "Q2"
+WHEN month between 7 and 9 then "Q3"
+WHEN month between 10 and 12 then "Q4"
+ELSE "unknown"
+END as Fiscal_Quarter
+FROM sales
+group by Fiscal_Quarter
+
+
+select * from salesanalysis
+
+select weekday, weeday_name, hour, sales from salesanalysis
+order by weekday, hour
+
+select account_id, order_id, sales from sales
+where order_id = '141457'
+group by account_id
