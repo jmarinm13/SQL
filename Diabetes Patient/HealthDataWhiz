@@ -1,0 +1,410 @@
+CREATE TABLE BIT_DB.diabetes (
+Patient_id integer(20),
+Pregnancies integer(20),
+Glucose integer(80),
+BloodPressure integer(20),
+SkinThickness integer(20),
+Insulin integer(20),
+BMI decimal(8,7) ,
+DiabetesPedigreeFunction decimal(8,7),
+Age integer(120),
+Outcome integer(120))
+
+/*Review Analysis*/
+select * from diabetes
+
+/*how many patiets*/
+select count(*) from diabetes
+
+/*how many patients with no diabetes*/
+select count(*) from diabetes
+where outcome = "0"
+
+/*how many patients with diabetes*/
+select count(*) from diabetes
+where outcome = "1"
+
+
+/*pregnancy history vs diabetes status*/
+SELECT pregnancies, COUNT(*) as count, 'Outcome 0' as outcome
+FROM diabetes
+WHERE pregnancies IN ("0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20")
+AND outcome = "0"
+GROUP BY pregnancies
+
+UNION ALL
+
+SELECT pregnancies, COUNT(*) as count, 'Outcome 1' as outcome
+FROM diabetes
+WHERE pregnancies IN ("0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20")
+AND outcome = "1"
+GROUP BY pregnancies
+
+
+/*how many patiens per blood pressure*/
+select bloodpressure, count(*) from diabetes
+group by bloodpressure
+order by bloodpressure 
+
+/*how many patiens per blood pressure with diabetes*/
+select bloodpressure, count(*) from diabetes
+where outcome = "1"
+group by bloodpressure
+order by bloodpressure 
+
+/*how many patients per skintickness*/
+select skinthickness, count(*) from diabetes
+group by skinthickness
+order by skinthickness
+
+/*how many patients per skintickness with diabetes*/
+select skinthickness, count(*) from diabetes
+where outcome = "1"
+group by skinthickness
+order by skinthickness
+
+/*how many patient per insulin*/
+select insulin, count(*) from diabetes
+group by insulin
+order by insulin
+
+/*how many patient per insulin with diabetes*/
+select insulin, count(*) from diabetes
+where outcome = "1"
+group by insulin
+order by insulin
+
+/*how many patient per BMI*/
+select BMI, count(*) from diabetes
+group by BMI
+order by BMI
+
+/*how many patient per BMI with diabetes*/
+select BMI, count(*) from diabetes
+where outcome = "1"
+group by BMI
+order by BMI
+
+/*how many patient per DiabetesPedigreeFunction*/
+select DiabetesPedigreeFunction, count(*) from diabetes
+group by DiabetesPedigreeFunction
+order by DiabetesPedigreeFunction
+
+/*how many patient per DiabetesPedigreeFunction with diabetes*/
+select DiabetesPedigreeFunction, count(*) from diabetes
+where outcome = "1"
+group by DiabetesPedigreeFunction
+order by DiabetesPedigreeFunction
+
+/*how many patient per age*/
+select age, count(*) from diabetes
+group by age
+order by age
+
+/*how many patient per age with diabetes*/
+select age, count(*) from diabetes
+where outcome = "1"
+group by age
+order by age
+
+/*how many patient per age without diabetes*/
+select age, count(*) from diabetes
+where outcome = "0"
+group by age
+order by age
+
+/*diabetic patient pregnancy history*/
+select count(*),
+case
+when pregnancies = "0" AND outcome = "1" then "no history pregnancies"
+when pregnancies >=1 AND outcome = "1" then "history of pregnancies"
+End as Diabetic_Patients_by_Pregnancy_History
+from diabetes
+where outcome = "1"
+group by Diabetic_Patients_by_Pregnancy_History
+
+/*2-hour OGTT results from diabetic patients*/
+Select count(*),
+case
+when glucose <= 140 and outcome = "1" then "normal 2-hour OGTT with Diabetes"
+when glucose >= 140 and outcome = "1" then "Abnormal 2-hour OGTT with Diabetes"
+end as two_hour_OGTT_vs_diabetes
+from diabetes
+where outcome = "1"
+group by two_hour_OGTT_vs_diabetes
+
+
+/*diabetic patient blood pressure results*/
+select count(*),
+case
+when bloodpressure <= 80 and outcome = "1" then "Normal Bloodpressure"
+when bloodpressure >= 80 and outcome = "1" then "Abnormal bloodpressure"
+end as BloodPressure_vs_Diabetes
+from diabetes
+where outcome = "1"
+group by BloodPressure_vs_Diabetes
+
+
+/*Skinthickness group diabetic patients*/
+SELECT COUNT(*) AS Count,
+  CASE 
+    WHEN skinthickness < 12 AND outcome = "1" THEN "Q1"
+    WHEN skinthickness BETWEEN 12 AND 17 AND outcome = "1" THEN "Q2"
+    WHEN skinthickness BETWEEN 17 AND 25 AND outcome = "1" THEN "Q3"
+    WHEN skinthickness > 25 AND outcome = "1" THEN "Q4"
+  END AS "Diabetic Patients by Skinthikness Group"
+FROM diabetes
+where outcome = "1"
+GROUP BY "Diabetic Patients by Skinthikness Group"
+
+/*Diabetic patient insulin results*/
+SELECT COUNT(*) AS Count,
+  CASE
+    WHEN insulin BETWEEN 5 AND 55 AND outcome = "1" THEN "Normal Insulin with Diabetes"
+    WHEN insulin > 55 AND outcome = "1" THEN "Abnormal Insulin with Diabetes"
+  END AS Insulin_vs_Diabetes
+FROM diabetes
+GROUP BY Insulin_vs_Diabetes;
+
+/*Diabetic patient BMI results*/
+SELECT COUNT(*) AS count,
+  CASE
+    WHEN BMI <= 18 AND outcome = '1' THEN 'underweight'
+    WHEN BMI BETWEEN 19 AND 24 AND outcome = '1' THEN 'optimal'
+    WHEN BMI BETWEEN 25 AND 29 AND outcome = '1' THEN 'overweight'
+    WHEN BMI >= 30 AND outcome = '1' THEN 'obese'
+  END AS "Diabetic Patient BMI Group"
+FROM diabetes
+WHERE outcome = '1' -- 
+GROUP BY "Diabetic Patient by BMI Group"
+
+
+/*what is the average BMI in patients with no diabetes*/
+select avg(BMI) from diabetes
+where outcome = "0"
+
+/*what is the average BMI in patients with diabetes*/
+select avg(BMI) from diabetes
+where outcome = "1" and BMI >= 30
+
+/*what is the average pedigree with no diabetes*/
+select avg(diabetespedigreefunction) from diabetes
+where outcome = "0"
+
+/*what is the average pedigree with diabetes*/
+select avg(diabetespedigreefunction) from diabetes
+where outcome = "1"
+
+/*what is the average age with no diabetes*/
+select avg(age) from diabetes
+where outcome = "0"
+
+/*what is the average age with diabetes*/
+select round(avg(age)) as average_age from diabetes
+where outcome = "1"
+
+/*glucose vs glucose*/
+SELECT  COUNT(*) as count, 'Diabetic Normal Glucose' as outcome
+FROM diabetes
+where glucose < 140
+AND outcome = "1"
+
+UNION ALL
+
+SELECT COUNT(*) as count, 'Diabetic Abnormal Glucose' as outcome
+FROM diabetes
+where glucose > 140 
+and outcome = "1"
+
+
+
+/*blood pressure vs outcome*/
+SELECT COUNT(bloodpressure) as count, 'Non-Diabetic' as outcome
+FROM diabetes
+where outcome <= 80
+GROUP BY glucose
+order by count
+
+UNION ALL
+
+SELECT COUNT(*) as count, 'Diabetic' as outcome
+FROM diabetes
+where outcome = "1"
+GROUP BY glucose
+
+/*skinthickness vs outcome*/
+SELECT skinthickness, COUNT(*) as count, 'Non-Diabetic' as outcome
+FROM diabetes
+WHERE outcome = "0"
+GROUP BY skinthickness
+
+UNION ALL
+
+SELECT skinthickness, COUNT(*) as count, 'Diabetic' as outcome
+FROM diabetes
+WHERE outcome = "1"
+GROUP BY skinthickness
+
+
+
+
+
+SELECT
+    SUM(CASE WHEN pregnancies = 0 THEN 1 ELSE 0 END) AS "no_history_of_pregnancies",
+    SUM(CASE WHEN pregnancies >= 1 THEN 1 ELSE 0 END) AS "history_of_pregnancies"
+FROM diabetes
+WHERE outcome = "1";
+
+
+
+/*insulin vs outcome*/
+SELECT insulin, COUNT(*) as count, 'Non-Diabetic' as outcome
+FROM diabetes
+WHERE outcome = "0"
+GROUP BY insulin
+
+UNION ALL
+
+SELECT insulin, COUNT(*) as count, 'Diabetic' as outcome
+FROM diabetes
+WHERE outcome = "1"
+GROUP BY insulin
+
+/*BMI vs outcome*/
+SELECT BMI, COUNT(*) as count, 'Non-Diabetic' as outcome
+FROM diabetes
+Where BMI <= 18
+AND outcome = "0"
+GROUP BY BMI
+
+UNION ALL
+
+SELECT BMI, COUNT(*) as count, 'Diabetic' as outcome
+FROM diabetes
+WHERE outcome = "1"
+GROUP BY BMI
+
+/*diabetespedigreefunction vs. outcome*/
+SELECT diabetespedigreefunction, COUNT(*) as count, 'Non-Diabetic' as outcome
+FROM diabetes
+WHERE outcome = "0"
+GROUP BY diabetespedigreefunction
+
+UNION ALL
+
+SELECT diabetespedigreefunction, COUNT(*) as count, 'Diabetic' as outcome
+FROM diabetes
+WHERE outcome = "1"
+GROUP BY diabetespedigreefunction
+
+/*age vs outcome*/
+SELECT age, COUNT(*) as count, 'Non-Diabetic' as outcome
+FROM diabetes
+WHERE outcome = "0"
+GROUP BY age
+
+UNION ALL
+
+SELECT age, COUNT(*) as count, 'Diabetic' as outcome
+FROM diabetes
+WHERE outcome = "1"
+GROUP BY age
+
+/*pregnancy vs no pregnancy diabetics*/
+select count(*), "no pregnancies" as outcome 
+from diabetes
+where pregnancies = "0" and outcome = "1"
+group by outcome
+Union All
+select count(*), "pregnancies" as outcome
+from diabetes
+where pregnancies >= "1" and outcome = "1"
+group by outcome
+
+
+
+UNION ALL
+
+SELECT diabetespedigreefunction, COUNT(*) as count, 'non-diabetic' as outcome
+FROM diabetes
+WHERE diabetespedigreefunction BETWEEN 1 AND 1.49
+AND outcome = '0'
+GROUP BY diabetespedigreefunction
+
+UNION ALL
+
+SELECT diabetespedigreefunction, COUNT(*) as count, 'diabetic' as outcome
+FROM diabetes
+WHERE diabetespedigreefunction BETWEEN 1 AND 1.49
+AND outcome = '1'
+GROUP BY diabetespedigreefunction
+
+UNION ALL
+
+SELECT diabetespedigreefunction, COUNT(*) as count, 'non-diabetic' as outcome
+FROM diabetes
+WHERE diabetespedigreefunction BETWEEN 1.50 AND 1.99
+AND outcome = '0'
+GROUP BY diabetespedigreefunction
+
+UNION ALL
+
+SELECT diabetespedigreefunction, COUNT(*) as count, 'diabetic' as outcome
+FROM diabetes
+WHERE diabetespedigreefunction BETWEEN 1.50 AND 1.99
+AND outcome = '1'
+GROUP BY diabetespedigreefunction
+
+UNION ALL
+SELECT diabetespedigreefunction, COUNT(*) as count, 'non-diabetic' as outcome
+FROM diabetes
+WHERE diabetespedigreefunction BETWEEN 1.99 AND 2.49
+AND outcome = '0'
+GROUP BY diabetespedigreefunction
+
+UNION ALL
+
+SELECT diabetespedigreefunction, COUNT(*) as count, 'diabetic' as outcome
+FROM diabetes
+WHERE diabetespedigreefunction BETWEEN 1.99 AND 2.49
+AND outcome = '1'
+GROUP BY diabetespedigreefunction
+
+
+
+SELECT
+    "diabetespedigreefunction by diabetes outcome",
+    SUM(CASE WHEN outcome = '0' THEN 1 ELSE 0 END) AS "Non-Diabetic",
+    SUM(CASE WHEN outcome = '1' THEN 1 ELSE 0 END) AS "Diabetic"
+FROM (
+    SELECT
+        CASE
+            WHEN diabetespedigreefunction BETWEEN 0 AND 0.49 THEN '(0-0.49)'
+            WHEN diabetespedigreefunction BETWEEN 0.50 AND 0.99 THEN '(0.50-0.99)'
+            WHEN diabetespedigreefunction BETWEEN 1 AND 1.49 THEN '(1-1.49)'
+            WHEN diabetespedigreefunction BETWEEN 1.50 AND 1.99 THEN '(1.50-1.99)'
+            WHEN diabetespedigreefunction BETWEEN 1.99 AND 2.49 THEN '(1.99-2.49)'
+        END AS "diabetespedigreefunction by diabetes outcome",
+        outcome
+    FROM diabetes
+) AS subquery
+GROUP BY "diabetespedigreefunction by diabetes outcome"
+ORDER BY "diabetespedigreefunction by diabetes outcome";
+
+/*diabetes pedigree function groups within Diabetic and Non-Diabetic patients*/
+SELECT "diabetespedigreefunction by diabetes outcome",
+ SUM(CASE WHEN outcome = 1 THEN 1 ELSE 0 END) AS "Diabetic",
+ SUM(CASE WHEN outcome = 0 THEN 1 ELSE 0 END) AS "Non-Diabetic"
+FROM ( SELECT
+        CASE
+            WHEN diabetespedigreefunction BETWEEN 0 AND 0.49 THEN '(0-0.49)'
+            WHEN diabetespedigreefunction BETWEEN 0.50 AND 0.99 THEN '(0.50-0.99)'
+            WHEN diabetespedigreefunction BETWEEN 1 AND 1.49 THEN '(1-1.49)'
+            WHEN diabetespedigreefunction BETWEEN 1.50 AND 1.99 THEN '(1.50-1.99)'
+            WHEN diabetespedigreefunction BETWEEN 1.99 AND 2.49 THEN '(1.99-2.49)'
+        END AS "diabetespedigreefunction by diabetes outcome",
+        outcome
+    FROM diabetes
+) AS subquery
+GROUP BY "diabetespedigreefunction by diabetes outcome"
+ORDER BY "diabetespedigreefunction by diabetes outcome";
