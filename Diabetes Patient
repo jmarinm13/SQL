@@ -376,26 +376,6 @@ AND outcome = '1'
 GROUP BY diabetespedigreefunction
 
 
-
-SELECT
-    "diabetespedigreefunction by diabetes outcome",
-    SUM(CASE WHEN outcome = '0' THEN 1 ELSE 0 END) AS "Non-Diabetic",
-    SUM(CASE WHEN outcome = '1' THEN 1 ELSE 0 END) AS "Diabetic"
-FROM (
-    SELECT
-        CASE
-            WHEN diabetespedigreefunction BETWEEN 0 AND 0.49 THEN '(0-0.49)'
-            WHEN diabetespedigreefunction BETWEEN 0.50 AND 0.99 THEN '(0.50-0.99)'
-            WHEN diabetespedigreefunction BETWEEN 1 AND 1.49 THEN '(1-1.49)'
-            WHEN diabetespedigreefunction BETWEEN 1.50 AND 1.99 THEN '(1.50-1.99)'
-            WHEN diabetespedigreefunction BETWEEN 1.99 AND 2.49 THEN '(1.99-2.49)'
-        END AS "diabetespedigreefunction by diabetes outcome",
-        outcome
-    FROM diabetes
-) AS subquery
-GROUP BY "diabetespedigreefunction by diabetes outcome"
-ORDER BY "diabetespedigreefunction by diabetes outcome";
-
 /*diabetes pedigree function groups within Diabetic and Non-Diabetic patients*/
 SELECT "diabetespedigreefunction by diabetes outcome",
  SUM(CASE WHEN outcome = 1 THEN 1 ELSE 0 END) AS "Diabetic",
